@@ -9,3 +9,5 @@ void afficherCarte();
 void avance();
 void droite();
 void gauche();
+int mesure(int value);
+void pose(int value);

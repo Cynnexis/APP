@@ -24,6 +24,7 @@ bool delete(List* l, int index);
 bool set(List* l, int index, int value);
 bool belongs(List l, int value);
 void printList(List l);
+void printListAsChar(List l);
 void freeList(List* l);
 
 #endif

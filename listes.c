@@ -44,7 +44,7 @@ Cell * getCell(List l, int index) {
 	Cell* cell = l.head;
 	int i;
 	
-	for (i = 0 ; i < index || cell != NULL ; i++)
+	for (i = 0 ; i < index && cell != NULL ; i++)
 		cell = cell->next;
 	
 	if (cell == NULL)
@@ -57,7 +57,7 @@ int get(List l, int index) {
 	int i;
 	Cell* cell = l.head;
 	
-	for (i = 0 ; i < index || cell != NULL ; i++)
+	for (i = 0 ; i < index && cell != NULL ; i++)
 		cell = cell->next;
 	
 	if (cell == NULL)
@@ -173,6 +173,25 @@ void printList(List l) {
 			cell = cell->next;
 		}
 		printf("%i]", cell->value);
+	}
+	else
+	{
+		printf("[]");
+	}
+}
+
+void printListAsChar(List l) {
+	Cell* cell = l.head;
+	
+	if (l.head != NULL)
+	{
+		printf("[");
+		while (cell->next != NULL)
+		{
+			printf("%c, ", cell->value);
+			cell = cell->next;
+		}
+		printf("%c]", cell->value);
 	}
 	else
 	{
