@@ -53,9 +53,9 @@ void afficherCarte() {
 	int i,j;
 	char c;
 
-	printf("\n\nCarte de mars.\n");
+	/*printf("\n\nCarte de mars.\n");
 	
-	printf("--------------\n\n");
+	printf("--------------\n\n");*/
 	for(j=0;j < tailleCarte;j++)
 	{
 		for(i=0;i < tailleCarte;i++)
@@ -92,7 +92,7 @@ void afficherCarte() {
 			}
 		}
 	}	
-	printf("\n\n--------------\n\n");
+	//printf("\n\n--------------\n\n");
 }
 
 
@@ -212,23 +212,23 @@ int mesure(int value) {
 		case 2:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = 1;
-				tmpY = -1;
+				tmpX += 1;
+				tmpY += -1;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = 1;
-				tmpY = 1;
+				tmpX += 1;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = -1;
-				tmpY = 1;
+				tmpX += -1;
+				tmpY += 1;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = -1;
-				tmpY = -1;
+				tmpX += -1;
+				tmpY += -1;
 			}
 			else
 				return -1;
@@ -237,23 +237,23 @@ int mesure(int value) {
 		case 3:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = 1;
-				tmpY = 0;
+				tmpX += 1;
+				tmpY += 0;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = 0;
-				tmpY = 1;
+				tmpX += 0;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = -1;
-				tmpY = 0;
+				tmpX += -1;
+				tmpY += 0;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = 0;
-				tmpY = -1;
+				tmpX += 0;
+				tmpY += -1;
 			}
 			else
 				return -1;
@@ -262,23 +262,23 @@ int mesure(int value) {
 		case 4:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = 1;
-				tmpY = 1;
+				tmpX += 1;
+				tmpY += 1;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = -1;
-				tmpY = 1;
+				tmpX += -1;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = -1;
-				tmpY = -1;
+				tmpX += -1;
+				tmpY += -1;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = 1;
-				tmpY = -1;
+				tmpX += 1;
+				tmpY += -1;
 			}
 			else
 				return -1;
@@ -292,23 +292,23 @@ int mesure(int value) {
 		case 6:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = -1;
-				tmpY = 1;
+				tmpX += -1;
+				tmpY += 1;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = 4;
-				tmpY = 1;
+				tmpX += 4;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = 1;
-				tmpY = -1;
+				tmpX += 1;
+				tmpY += -1;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = -1;
-				tmpY = -1;
+				tmpX += -1;
+				tmpY += -1;
 			}
 			else
 				return -1;
@@ -317,23 +317,23 @@ int mesure(int value) {
 		case 7:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = -1;
-				tmpY = 0;
+				tmpX += -1;
+				tmpY += 0;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = 0;
-				tmpY = 1;
+				tmpX += 0;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = 1;
-				tmpY = 0;
+				tmpX += 1;
+				tmpY += 0;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = 0;
-				tmpY = -1;
+				tmpX += 0;
+				tmpY += -1;
 			}
 			else
 				return -1;
@@ -342,23 +342,23 @@ int mesure(int value) {
 		case 8:
 			if (dX == 0 && dY == -1)
 			{
-				tmpX = -1;
-				tmpY = -1;
+				tmpX += -1;
+				tmpY += -1;
 			}
 			else if (dX == -1 && dY == 0)
 			{
-				tmpX = -1;
-				tmpY = 1;
+				tmpX += -1;
+				tmpY += 1;
 			}
 			else if (dX == 0 && dY == 1)
 			{
-				tmpX = 1;
-				tmpY = 1;
+				tmpX += 1;
+				tmpY += 1;
 			}
 			else if (dX == 1 && dY == 0)
 			{
-				tmpX = 1;
-				tmpY = -1;
+				tmpX += 1;
+				tmpY += -1;
 			}
 			else
 				return -1;

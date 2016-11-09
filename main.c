@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
 	//	- une interpretation du programme lu
 	/** Nouvelle Implémentation **/
 	// Initialisation
+	
 	if (argc == 3)
 	{
 		lireCarte(argv[1]);
@@ -64,11 +65,10 @@ int main(int argc, char *argv[]) {
 	for(x = fscanf(f_commandes, "%c",&c) ; x == 1 && !feof(f_commandes) && !((c == 10) || (c == 13) || (c == 32)) ; x = fscanf(f_commandes, "%c",&c))
 	{
 		c = toUpperCase(c);
-		if (c == 'A' || c == 'G' || c == 'D')
+		if (c == 'A' || c == 'G' || c == 'D' || c == 'M' || c == 'P')
 			list_add(&l_commandes, (int)c);
 		else if (c >= '0' && c <= '8')
-			list_add(&l_commandes, (int) (c - '0'));
-			
+			list_add(&l_pile, (int) (c - '0'));
 		else
 		{
 			fprintf(stderr, "\033[1;31m%s: Error: \'%i\': Invalid command.\033[0m\n", argv[0], (int)c);
@@ -76,8 +76,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	printf("Liste des commandes : ");list_print_as_char(l_commandes);printf("\n");
-	printf("Pile : ");list_print(l_pile);printf("\n");
+	printf("\033[1mListe des commandes :\033[0m ");list_print_as_char(l_commandes);printf("\n");
+	printf("\033[1mPile :\033[0m ");list_print(l_pile);printf("\n");
 	lecture(l_commandes, l_pile);
 	
 	/** TMP **

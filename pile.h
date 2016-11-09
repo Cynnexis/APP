@@ -5,7 +5,8 @@
 
 typedef List Pile;
 
-int depiler(Pile P);
-void empiler(Pile P, int value);
+int depiler(Pile* P);
+int depiler_tete(Pile* P);
+void empiler(Pile* P, int value);
 
 #endif

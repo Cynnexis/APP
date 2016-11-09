@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "curiosity.h"
 #include "interprete.h"
 
@@ -10,15 +11,24 @@
  *
  */
 
-void lecture(List l_commandes, List l_pile) {
-	int i;
+void lecture(Pile commandes, Pile pile) {
+	int i, value;
 	char command;
+	int length = list_length(commandes);
 	
 	printf("Interprétation...\n");
-	for (i = 0 ; i < list_length(l_commandes) ; i++)
+	//printf("Pile  |  Programme");
+	for (i = 0 ; i < length ; i++)
 	{
-		command = (char) list_get(l_commandes, i);
-		//afficherCarte();
+		// Affichage
+		printf("------------------------------\n");
+		printf("\033[1mStep n°%i:\033[0m\n", i);
+		printf("\033[1mCommandes: \033[0m\n");list_print_as_char(commandes);printf("\n");
+		printf("\033[1mPile: \033[0m\n");list_print(pile);printf("\n");
+		afficherCarte();
+		printf("------------------------------\n");
+		
+		command = (char) depiler_tete(&commandes);
 		switch (command)
 		{
 			case 'A':
@@ -30,8 +40,17 @@ void lecture(List l_commandes, List l_pile) {
 			case 'D':
 				droite();
 				break;
-			default:
+			case 'M':
+				value = mesure(depiler(&pile));
+				assert(value != -1);
+				empiler(&pile, value);
 				break;
+			case 'P':
+				value = depiler(&pile);
+				assert(value != -1);
+				break;
+			default:
+				return;
 		}
 	}
 	printf("Interprété.\n");
