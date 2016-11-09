@@ -78,11 +78,11 @@ void afficherCarte() {
 			{
 				if ((i==cX)&&(j==cY))
 				{ //position curiosity
-					if (dX==1)
+					if (dX == 1)
 						printf(">");
-					else if (dX==-1)
+					else if (dX == -1)
 						printf("<");
-					else if (dY==1)
+					else if (dY == 1)
 						printf("V");
 					else
 						printf("^");
@@ -97,56 +97,291 @@ void afficherCarte() {
 
 
 void avance() {
-int tmpX = cX + dX;
-int tmpY = cY + dY;
-char c=mars[tmpX][tmpY];
+	int tmpX = cX + dX;
+	int tmpY = cY + dY;
+	char c=mars[tmpX][tmpY];
 
-if (c=='~') {
-	printf("Plouf !?!\n");
-	exit(1);}
-else if (c=='@') {
-	printf("**************************\n");
-	printf("*                        *\n");
-	printf("*       Victoire !!!     *\n");
-	printf("*                        *\n");
-	printf("**************************\n");
-	exit(0);}
-else if ((c!='.')&&(c!='M')&&(c!='m')) {
- cX=tmpX;
- cY=tmpY;	printf("Oups ! Curiosity est sur %c ?!?\n\n",c);}
-else {
- cX=tmpX;
- cY=tmpY;}
-return;}
+	if (c=='~')
+	{
+		printf("Plouf !?!\n");
+		exit(1);
+	}
+	else if (c == '@')
+	{
+		printf("**************************\n");
+		printf("*                        *\n");
+		printf("*       Victoire !!!     *\n");
+		printf("*                        *\n");
+		printf("**************************\n");
+		exit(0);
+	}
+	else if ((c!='.')&&(c!='M')&&(c!='m'))
+	{
+		cX=tmpX;
+		cY=tmpY;	printf("Oups ! Curiosity est sur %c ?!?\n\n",c);
+	}
+	else
+	{
+		cX=tmpX;
+		cY=tmpY;
+	}
+}
 
 
 void droite() {
-if (dX==1) {
-	dX=0;
-	dY=1;}
-else if (dX==-1) {
-	dX=0;
-	dY=-1;}
-else if (dY==1) {
-	dX=-1;
-	dY=0;}
-else {
-	dX=1;
-	dY=0;}	
-return;}
+	if (dX==1)
+	{
+		dX=0;
+		dY=1;
+	}
+	else if (dX==-1)
+	{
+		dX=0;
+		dY=-1;
+	}
+	else if (dY==1)
+	{
+		dX=-1;
+		dY=0;
+	}
+	else
+	{
+		dX=1;
+		dY=0;
+	}
+}
 
 
 void gauche() {
-if (dX==1) {
-	dX=0;
-	dY=-1;}
-else if (dX==-1) {
-	dX=0;
-	dY=1;}
-else if (dY==1) {
-	dX=1;
-	dY=0;}
-else {
-	dX=-1;
-	dY=0;}	
-return;}
+	if (dX==1)
+	{
+		dX=0;
+		dY=-1;
+	}
+	else if (dX==-1)
+	{
+		dX=0;
+		dY=1;
+	}
+	else if (dY==1)
+	{
+		dX=1;
+		dY=0;
+	}
+	else
+	{
+		dX=-1;
+		dY=0;
+	}	
+}
+
+int analyse(char square) {
+	switch (square)
+	{
+		// rien
+		case '.':
+			return 0;
+		// marque
+		case 'M':
+			return 1;
+		// eau
+		case '~':
+			return 2;
+		// rocher
+		case '#':
+			return 3;
+		default:
+			return -1;
+	}
+}
+
+int mesure(int value) {
+	int tmpX = cX;
+	int tmpY = cY;
+	switch (value)
+	{
+		// sur place:
+		case 0:
+			break;
+		// devant
+		case 1:
+			tmpX += dX;
+			tmpY += dY;
+			break;
+		// devant droite
+		case 2:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = 1;
+				tmpY = -1;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = 1;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = -1;
+				tmpY = 1;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = -1;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		// droite
+		case 3:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = 1;
+				tmpY = 0;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = 0;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = -1;
+				tmpY = 0;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = 0;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		// derrière droite
+		case 4:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = 1;
+				tmpY = 1;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = -1;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = -1;
+				tmpY = -1;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = 1;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		// derrière
+		case 5:
+			tmpX -= dX;
+			tmpY -= dY;
+			break;
+		// derrière gauche
+		case 6:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = -1;
+				tmpY = 1;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = 4;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = 1;
+				tmpY = -1;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = -1;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		// gauche
+		case 7:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = -1;
+				tmpY = 0;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = 0;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = 1;
+				tmpY = 0;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = 0;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		// devant gauche
+		case 8:
+			if (dX == 0 && dY == -1)
+			{
+				tmpX = -1;
+				tmpY = -1;
+			}
+			else if (dX == -1 && dY == 0)
+			{
+				tmpX = -1;
+				tmpY = 1;
+			}
+			else if (dX == 0 && dY == 1)
+			{
+				tmpX = 1;
+				tmpY = 1;
+			}
+			else if (dX == 1 && dY == 0)
+			{
+				tmpX = 1;
+				tmpY = -1;
+			}
+			else
+				return -1;
+			break;
+		default:
+			return -1;
+	}
+	return analyse(mars[tmpX][tmpY]);
+}
+
+void pose(int value) {
+	char* square = &mars[cX][cY];
+	switch (value)
+	{
+		case 0:
+			if (*square == 'M')
+				*square = '.';
+			break;
+		case 1:
+			if (*square == '.')
+				*square = 'M';
+			break;
+		default:
+			break;
+	}
+}

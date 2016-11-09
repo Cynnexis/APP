@@ -15,9 +15,9 @@ void lecture(List l_commandes, List l_pile) {
 	char command;
 	
 	printf("Interprétation...\n");
-	for (i = 0 ; i < getLength(l_commandes) ; i++)
+	for (i = 0 ; i < list_length(l_commandes) ; i++)
 	{
-		command = (char)get(l_commandes, i);
+		command = (char) list_get(l_commandes, i);
 		//afficherCarte();
 		switch (command)
 		{
@@ -34,4 +34,5 @@ void lecture(List l_commandes, List l_pile) {
 				break;
 		}
 	}
+	printf("Interprété.\n");
 }

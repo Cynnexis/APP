@@ -1,21 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "boolean.h"
 #include "listes.h"
 
-/*
- *  Auteur(s) : CERBA Guilhem - BERGER Valentin
- *  Date : 19/10/2016
- *  Suivi des Modifications :
- *
- */
-
-void initList(List* l) {
+/** CONSTRUCTOR **/
+void list_new(List* l) {
 	l->head = NULL;
 }
 
-int getLength(List l) {
+/** DESTRUCTOR **/
+void list_delete(List* l) {
+	Cell* head = l->head;
+	Cell* tmp;
+
+	if (head != NULL)
+	{
+		tmp = head;
+		head = head->next;
+		tmp->next = NULL;
+		free(tmp);
+	}
+	l->head = NULL;
+}
+
+/** ACCESSORS **/
+int list_length(List l) {
 	int length = 0;
 	Cell* cell = l.head;
 	
@@ -27,11 +36,11 @@ int getLength(List l) {
 	return length;
 }
 
-Cell* getHead(List l) {
+Cell* list_head(List l) {
 	return l.head;
 }
 
-Cell* getTail(List l) {
+Cell* list_tail(List l) {
 	if (l.head == NULL)
 		return NULL;
 	Cell* cell = l.head;
@@ -40,7 +49,7 @@ Cell* getTail(List l) {
 	return cell;
 }
 
-Cell * getCell(List l, int index) {
+Cell * list_getCell(List l, int index) {
 	Cell* cell = l.head;
 	int i;
 	
@@ -53,7 +62,7 @@ Cell * getCell(List l, int index) {
 	return cell;
 }
 
-int get(List l, int index) {
+int list_get(List l, int index) {
 	int i;
 	Cell* cell = l.head;
 	
@@ -66,8 +75,25 @@ int get(List l, int index) {
 	return cell->value;
 }
 
-void add(List* l, int value) {
-	Cell* tail = getTail(*l);
+bool list_contains(List l, int value) {
+	Cell* cell = l.head;
+	bool result = false;
+	
+	if (cell == NULL)
+		return false;
+	
+	while (cell != NULL && result == false)
+	{
+		result = (cell->value == value);
+		cell = cell->next;
+	}
+	
+	return result;
+}
+
+/** MUTATORS **/
+void list_add(List* l, int value) {
+	Cell* tail = list_tail(*l);
 	
 	if (tail != NULL)
 	{
@@ -84,7 +110,7 @@ void add(List* l, int value) {
 		l->head = tail;
 	}
 }
-bool addAt(List* l, int index, int value) {
+bool list_addAt(List* l, int index, int value) {
 	int i;
 	Cell* cell = l->head;
 	Cell* new = malloc(sizeof(Cell));
@@ -101,7 +127,7 @@ bool addAt(List* l, int index, int value) {
 	return true;
 }
 
-bool delete(List* l, int index) {
+bool list_remove(List* l, int index) {
 	int i;
 	Cell* cell1 = l->head;
 	Cell* cell2 = NULL;
@@ -130,7 +156,12 @@ bool delete(List* l, int index) {
 	return true;
 }
 
-bool set(List* l, int index, int value) {
+bool list_removeAll(List* l) {
+	list_delete(l);
+	list_new(l);
+}
+
+bool list_set(List* l, int index, int value) {
 	int i;
 	Cell* cell = l->head;
 	
@@ -142,26 +173,59 @@ bool set(List* l, int index, int value) {
 	
 	cell->value = value;
 	return true;
-	
 }
 
-bool belongs(List l, int value) {
+/** OTHERS **/
+int* listToArray(List l) {
+	int i;
 	Cell* cell = l.head;
-	bool result = false;
+	int* array;
 	
 	if (cell == NULL)
-		return false;
-	
-	while (cell != NULL && result == false)
+		array = NULL;
+	else
 	{
-		result = (cell->value == value);
-		cell = cell->next;
+		array = malloc(sizeof(int) * list_length(l));
+		
+		for (i = 0 ; cell != NULL ; i++)
+		{
+			array[i] = cell->value;
+			cell = cell->next;
+		}
 	}
-	
-	return result;
+	return array;
 }
 
-void printList(List l) {
+void listFromArray(List* l, int* array, int length) {
+	int i;
+	
+	list_removeAll(l);
+	
+	for (i = 0 ; i < length ; i++)
+		list_add(l, array[i]);
+}
+
+// WARNING: Insertion Sort: There is probably a better way to sort a linked list
+void list_sort(List *l) {
+	int i, j, ind_min, length = list_length(*l), tmp;
+	
+	for (i = 0 ; i < length-1 ; i++)
+	{
+		ind_min = i;
+		for (j = i+1 ; j < length ; j++)
+			if (list_get(*l, j) < list_get(*l, ind_min))
+				ind_min = j;
+		
+		if (i != ind_min)
+		{
+			tmp = list_get(*l, ind_min);
+			list_set(l, ind_min, list_get(*l, i));
+			list_set(l, i, tmp);
+		}
+	}
+}
+
+void list_print(List l) {
 	Cell* cell = l.head;
 	
 	if (l.head != NULL)
@@ -180,7 +244,7 @@ void printList(List l) {
 	}
 }
 
-void printListAsChar(List l) {
+void list_print_as_char(List l) {
 	Cell* cell = l.head;
 	
 	if (l.head != NULL)
@@ -188,28 +252,14 @@ void printListAsChar(List l) {
 		printf("[");
 		while (cell->next != NULL)
 		{
-			printf("%c, ", cell->value);
+			printf("%c, ", (char) cell->value);
 			cell = cell->next;
 		}
-		printf("%c]", cell->value);
+		printf("%c]", (char) cell->value);
 	}
 	else
 	{
 		printf("[]");
 	}
-}
-
-void freeList(List* l) {
-	Cell* head = l->head;
-	Cell* tmp;
-
-	if (head != NULL)
-	{
-		tmp = head;
-		head = head->next;
-		tmp->next = NULL;
-		free(tmp);
-	}
-	l->head = NULL;
 }
 

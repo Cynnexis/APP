@@ -58,16 +58,17 @@ int main(int argc, char *argv[]) {
 	}
 	
 	afficherCarte();
-	initList(&l_commandes);
-	initList(&l_pile);
+	list_new(&l_commandes);
+	list_new(&l_pile);
 	
 	for(x = fscanf(f_commandes, "%c",&c) ; x == 1 && !feof(f_commandes) && !((c == 10) || (c == 13) || (c == 32)) ; x = fscanf(f_commandes, "%c",&c))
 	{
 		c = toUpperCase(c);
 		if (c == 'A' || c == 'G' || c == 'D')
-			add(&l_commandes, (int)c);
+			list_add(&l_commandes, (int)c);
 		else if (c >= '0' && c <= '8')
-			add(&l_commandes, (int) (c - '0'));
+			list_add(&l_commandes, (int) (c - '0'));
+			
 		else
 		{
 			fprintf(stderr, "\033[1;31m%s: Error: \'%i\': Invalid command.\033[0m\n", argv[0], (int)c);
@@ -75,8 +76,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	printf("Liste des commandes : ");printListAsChar(l_commandes);printf("\n");
-	printf("Pile : ");printList(l_pile);printf("\n");
+	printf("Liste des commandes : ");list_print_as_char(l_commandes);printf("\n");
+	printf("Pile : ");list_print(l_pile);printf("\n");
 	lecture(l_commandes, l_pile);
 	
 	/** TMP **
