@@ -8,5 +8,6 @@
 #define DROITE 68
 
 void lecture(Pile commandes, Pile pile);
+bool execute_command(char command, Pile pile);
 
 #endif

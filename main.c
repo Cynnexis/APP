@@ -18,7 +18,7 @@ int cX=1,cY=1; // Position de curiosity (cX,cY)
 int dX=1,dY=0;	// Direction de curiosity (dX,dY)=(1,0)|(-1,0)|(0,1)|(0,-1)
 
 int main(int argc, char *argv[]) {
-	int x;
+	int i, x;
 	char c;
 	List l_commandes, l_pile;
 	FILE* f_commandes;
@@ -65,10 +65,54 @@ int main(int argc, char *argv[]) {
 	for(x = fscanf(f_commandes, "%c",&c) ; x == 1 && !feof(f_commandes) && !((c == 10) || (c == 13) || (c == 32)) ; x = fscanf(f_commandes, "%c",&c))
 	{
 		c = toUpperCase(c);
-		if (c == 'A' || c == 'G' || c == 'D' || c == 'M' || c == 'P')
+		// On passe les espaces:
+		while (c == ' ') x = fscanf(f_commandes, "%c",&c);
+		
+		// If c is a character (command):
+		if (c == 'A' || c == 'G' || c == 'D' || c == 'M' || c == 'P' || c == '?')
 			list_add(&l_commandes, (int)c);
+		// else if the character is a digit:
 		else if (c >= '0' && c <= '8')
 			list_add(&l_pile, (int) (c - '0'));
+		// else if the character is a '{' (command beginning):
+		else if (c == '{')
+		{
+			/* On lit toute la commande de format {V}{F}. Si le format n'est pas
+			   respecté, on affiche un message d'erreur et on quite. */
+			// On récupère V
+			x = fscanf(f_commandes, "%c",&c);
+			list_add(&l_pile, (int)c);
+			// On récupère '}'
+			x = fscanf(f_commandes, "%c",&c);
+			if (c != '}')
+			{
+				fprintf(stderr, "\033[31;m1Erreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+				return EXIT_FAILURE;
+			}
+			// On récupère '{'
+			x = fscanf(f_commandes, "%c",&c);
+			if (c != '{')
+			{
+				fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+				return EXIT_FAILURE;
+			}
+			// On récupère F
+			x = fscanf(f_commandes, "%c",&c);
+			// Si F est vide, on ajoute le caractère '.' dans la pile.
+			if (c == '}')
+				list_add(&l_pile, (int)'.');
+			else
+			{
+				list_add(&l_pile, (int)c);
+				// On récupère '}'
+				x = fscanf(f_commandes, "%c",&c);
+				if (c != '}')
+				{
+					fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+					return EXIT_FAILURE;
+				}
+			}
+		}
 		else
 		{
 			fprintf(stderr, "\033[1;31m%s: Error: \'%i\': Invalid command.\033[0m\n", argv[0], (int)c);
