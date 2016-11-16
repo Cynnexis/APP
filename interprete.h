@@ -7,7 +7,9 @@
 #define GAUCHE 71
 #define DROITE 68
 
-void lecture(Pile commandes, Pile pile);
-bool execute_command(char command, Pile pile);
+void execute(Pile commandes, Pile pile);
+bool execute_command(char command, Pile* pile);
+
+void print_commandes(Pile commandes);
 
 #endif

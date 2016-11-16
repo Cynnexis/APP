@@ -178,8 +178,9 @@ void gauche() {
 int analyse(char square) {
 	switch (square)
 	{
-		// rien
+		// rien ou objectif
 		case '.':
+		case '@':
 			return 0;
 		// marque
 		case 'M':

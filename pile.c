@@ -15,7 +15,7 @@ int depiler(Pile* P) {
 	}
 	else
 	{
-		return 0;
+		return -1;
 	}
 }
 
@@ -30,10 +30,17 @@ int depiler_tete(Pile* P) {
 		return value;
 	}
 	else
-		return 0;
+		return -1;
 }
 
 void empiler(Pile* P, int value) {
 	list_add(P, value);
+}
+
+void empiler_tete(Pile* P, int value) {
+	Cell* cell = malloc(sizeof(Cell));
+	cell->value = value;
+	cell->next = P->head;
+	P->head = cell;
 }
 

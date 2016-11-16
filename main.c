@@ -18,7 +18,6 @@ int cX=1,cY=1; // Position de curiosity (cX,cY)
 int dX=1,dY=0;	// Direction de curiosity (dX,dY)=(1,0)|(-1,0)|(0,1)|(0,-1)
 
 int main(int argc, char *argv[]) {
-	int i, x;
 	char c;
 	List l_commandes, l_pile;
 	FILE* f_commandes;
@@ -62,12 +61,66 @@ int main(int argc, char *argv[]) {
 	list_new(&l_commandes);
 	list_new(&l_pile);
 	
-	for(x = fscanf(f_commandes, "%c",&c) ; x == 1 && !feof(f_commandes) && !((c == 10) || (c == 13) || (c == 32)) ; x = fscanf(f_commandes, "%c",&c))
+	for(c = fgetc(f_commandes) ; !((c == EOF) || (c == 10) || (c == 13)) ; c = fgetc(f_commandes))
 	{
 		c = toUpperCase(c);
 		// On passe les espaces:
-		while (c == ' ') x = fscanf(f_commandes, "%c",&c);
+		while (c == ' ') c = fgetc(f_commandes);
 		
+		// Verification
+		if (c == 'A' || c == 'G' || c == 'D' || c == 'M' || c == 'P' || c == '?')
+			list_add(&l_commandes, (int)c);
+		else if (c >= '0' && c <= '8')
+			list_add(&l_commandes, (int) (c - '0'));
+		// Si c'est une instruction conditionnelle:
+		else if (c == '{')
+		{
+			/* On lit toute la commande de format {V}{F}. Si le format n'est pas
+			   respecté, on affiche un message d'erreur et on quite. */
+			list_add(&l_commandes, (int)c);
+			// On récupère V
+			c = fgetc(f_commandes);
+			while (c == ' ') c = fgetc(f_commandes);
+			list_add(&l_commandes, (int)c);
+			// On récupère '}'
+			c = fgetc(f_commandes);
+			while (c == ' ') c = fgetc(f_commandes);
+			if (c != '}')
+			{
+				fprintf(stderr, "\033[31;m1Erreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+				return EXIT_FAILURE;
+			}
+			list_add(&l_commandes, (int)c);
+			// On récupère '{'
+			c = fgetc(f_commandes);
+			if (c != '{')
+			{
+				fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+				return EXIT_FAILURE;
+			}
+			list_add(&l_commandes, (int)c);
+			// On récupère F
+			c = fgetc(f_commandes);
+			while (c == ' ') c = fgetc(f_commandes);
+			// Si F est vide, on ne stock rien.
+			if (c == '}')
+				list_add(&l_commandes, (int)c);
+			else
+			{
+				list_add(&l_commandes, (int)c);
+				// On récupère '}'
+				c = fgetc(f_commandes);
+				while (c == ' ') c = fgetc(f_commandes);
+				if (c != '}')
+				{
+					fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
+					return EXIT_FAILURE;
+				}
+				list_add(&l_commandes, (int)c);
+			}
+		}
+		
+		/*
 		// If c is a character (command):
 		if (c == 'A' || c == 'G' || c == 'D' || c == 'M' || c == 'P' || c == '?')
 			list_add(&l_commandes, (int)c);
@@ -78,26 +131,26 @@ int main(int argc, char *argv[]) {
 		else if (c == '{')
 		{
 			/* On lit toute la commande de format {V}{F}. Si le format n'est pas
-			   respecté, on affiche un message d'erreur et on quite. */
+			   respecté, on affiche un message d'erreur et on quite. *
 			// On récupère V
-			x = fscanf(f_commandes, "%c",&c);
+			c = fgetc(f_commandes);
 			list_add(&l_pile, (int)c);
 			// On récupère '}'
-			x = fscanf(f_commandes, "%c",&c);
+			c = fgetc(f_commandes);
 			if (c != '}')
 			{
 				fprintf(stderr, "\033[31;m1Erreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
 				return EXIT_FAILURE;
 			}
 			// On récupère '{'
-			x = fscanf(f_commandes, "%c",&c);
+			c = fgetc(f_commandes);
 			if (c != '{')
 			{
 				fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
 				return EXIT_FAILURE;
 			}
 			// On récupère F
-			x = fscanf(f_commandes, "%c",&c);
+			c = fgetc(f_commandes);
 			// Si F est vide, on ajoute le caractère '.' dans la pile.
 			if (c == '}')
 				list_add(&l_pile, (int)'.');
@@ -105,7 +158,7 @@ int main(int argc, char *argv[]) {
 			{
 				list_add(&l_pile, (int)c);
 				// On récupère '}'
-				x = fscanf(f_commandes, "%c",&c);
+				c = fgetc(f_commandes);
 				if (c != '}')
 				{
 					fprintf(stderr, "\033[31;1mErreur: Format invalide. Le caractère \'%c\' (code ascii %i).\033[0m\n", c, (int) c);
@@ -118,11 +171,13 @@ int main(int argc, char *argv[]) {
 			fprintf(stderr, "\033[1;31m%s: Error: \'%i\': Invalid command.\033[0m\n", argv[0], (int)c);
 			exit(EXIT_FAILURE);
 		}
+		*/
 	}
 	
 	printf("\033[1mListe des commandes :\033[0m ");list_print_as_char(l_commandes);printf("\n");
 	printf("\033[1mPile :\033[0m ");list_print(l_pile);printf("\n");
-	lecture(l_commandes, l_pile);
+	
+	execute(l_commandes, l_pile);
 	
 	/** TMP **
 	// Initialisation
