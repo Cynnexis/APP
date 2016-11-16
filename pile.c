@@ -44,3 +44,54 @@ void empiler_tete(Pile* P, int value) {
 	P->head = cell;
 }
 
+void print_pile(Pile p) {
+	Cell* cell = p.head;
+	
+	if (p.head != NULL)
+	{
+		printf("[");
+		while (cell->next != NULL)
+		{
+			if (cell->value >= 0 && cell->value <= 9)
+				printf("%i, ", cell->value);
+			else if (((char)cell->value) == '{')
+			{
+				// {
+				printf("%c", cell->value);
+				// V
+				cell = cell->next;
+				printf("%c", cell->value);
+				// }
+				cell = cell->next;
+				printf("%c", cell->value);
+				// {
+				cell = cell->next;
+				printf("%c", cell->value);
+				// F or }
+				cell = cell->next;
+				if (cell->value == '}')
+					printf("%c, ", cell->value);
+				else
+				{
+					// F
+					printf("%c", cell->value);
+					// }
+					cell = cell->next;
+					printf("%c, ", cell->value);
+				}
+			}
+			else
+				printf("%c, ", cell->value);
+			cell = cell->next;
+		}
+		if (cell->value >= 0 && cell->value <= 9)
+			printf("%i]", cell->value);
+		else
+			printf("%c]", cell->value);
+	}
+	else
+	{
+		printf("[]");
+	}
+}
+

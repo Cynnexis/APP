@@ -1,6 +1,6 @@
-#include "curiosity.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "curiosity.h"
 
 /*
  *	Auteur(s) : CERBA Guilhem - BERGER Valentin
@@ -52,10 +52,7 @@ void lireCarte(char *carte) {
 void afficherCarte() {
 	int i,j;
 	char c;
-
-	/*printf("\n\nCarte de mars.\n");
 	
-	printf("--------------\n\n");*/
 	for(j=0;j < tailleCarte;j++)
 	{
 		for(i=0;i < tailleCarte;i++)
@@ -91,8 +88,7 @@ void afficherCarte() {
 					printf("%c",c);
 			}
 		}
-	}	
-	//printf("\n\n--------------\n\n");
+	}
 }
 
 
@@ -118,7 +114,8 @@ void avance() {
 	else if ((c!='.')&&(c!='M')&&(c!='m'))
 	{
 		cX=tmpX;
-		cY=tmpY;	printf("Oups ! Curiosity est sur %c ?!?\n\n",c);
+		cY=tmpY;
+		printf("Oups ! Curiosity est sur %c ?!?\n\n",c);
 	}
 	else
 	{

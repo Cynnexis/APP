@@ -19,14 +19,11 @@ void execute(Pile commandes, Pile pile) {
 	printf("Interprétation...\n");
 	for (i = 0 ; i < length ; i++)
 	{
-		/* TODO: Vérifier à changer la length lors de l'execution d'instruction
-		   conditonnelle. */
-		
 		// Affichage
 		printf("------------------------------\n");
 		printf("\033[1mStep n°%i:\033[0m\n", i);
-		printf("\033[1mCommandes: \033[0m\n");print_commandes(commandes);printf("\n");
-		printf("\033[1mPile: \033[0m\n");print_commandes(pile);printf("\n");
+		printf("\033[1mCommandes: \033[0m\n");print_pile(commandes);printf("\n");
+		printf("\033[1mPile: \033[0m\n");print_pile(pile);printf("\n");
 		afficherCarte();
 		printf("------------------------------\n");
 		
@@ -110,57 +107,6 @@ bool execute_command(char command, Pile* pile) {
 		default:
 			return false;
 	}
-	//printf("\033[36;1mJ'execute %c.\033[0m\n", command);
 	return true;
 }
 
-void print_commandes(Pile commandes) {
-	Cell* cell = commandes.head;
-	
-	if (commandes.head != NULL)
-	{
-		printf("[");
-		while (cell->next != NULL)
-		{
-			if (cell->value >= 0 && cell->value <= 9)
-				printf("%i, ", cell->value);
-			/*else if (((char)cell->value) == '{')
-			{
-				// {
-				printf("%c", cell->value);
-				// V
-				cell = cell->next;
-				printf("%c", cell->value);
-				// }
-				cell = cell->next;
-				printf("%c", cell->value);
-				// {
-				cell = cell->next;
-				printf("%c", cell->value);
-				// F or }
-				cell = cell->next;
-				if (cell->value == '}')
-					printf("%c", cell->value);
-				else
-				{
-					// F
-					printf("%c", cell->value);
-					// }
-					cell = cell->next;
-					printf("%c", cell->value);
-				}
-			}*/
-			else
-				printf("%c, ", cell->value);
-			cell = cell->next;
-		}
-		if (cell->value >= 0 && cell->value <= 9)
-			printf("%i]", cell->value);
-		else
-			printf("%c]", cell->value);
-	}
-	else
-	{
-		printf("[]");
-	}
-}

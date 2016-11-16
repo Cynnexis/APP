@@ -9,7 +9,6 @@
 
 void execute(Pile commandes, Pile pile);
 bool execute_command(char command, Pile* pile);
-
 void print_commandes(Pile commandes);
 
 #endif
